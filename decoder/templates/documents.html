@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block meta %}
+<!-- <meta http-equiv="refresh" content="10"> -->
+{% endblock %}
+
+{% block title %}Документы{% endblock %}
+
+{% block active2 %}active{% endblock %}
+
+{% block content %}
+
+<div class="container-lg">
+
+<br><br><br>
+<form class="btn-group" action="{% url 'load_file' %}" enctype="multipart/form-data" method ="POST">
+  {% csrf_token %}
+ <input class="form-control" id="file-uploader" type="file" name="file" accept="application/pdf">
+ <input class="btn btn-outline-primary" type="submit" value="Загрузить PDF">
+</form>
+
+<div id="feedback"></div>
+<label id="progress-label" for="progress"></label>
+<progress id="progress" value="0" max="100"></progress>
+
+
+<hr>
+
+ <table class="table table-hover table-striped">
+  <thead class="thead-dark">
+   <td>Дата загрузки</td>
+   <td>Название PDF файла</td>
+   <td>Количество КМ</td>
+   <td>PDF файл</td>
+   <td>CSV файл</td>
+  </thead>
+  
+  {% for obj in files reversed %}
+  <tr>
+   <td>{{ obj.data }}</td>
+   <td>{{ obj.file_name|truncatechars:20 }}</td>
+   <td>{{ obj.count_pages }} км</td>
+   <td><a href="{{ obj.pdf_file.url }}" download="">PDF</a></td>
+   {% if obj.csv_file %}
+   <td>
+<a class="btn btn-sm btn-primary" href="{% url 'agr' obj.pk %}">выбрать</a>
+   </td>
+   
+   {% else %}
+   <td><div class="spinner-border text-primary" style="height:20px; width:20px;" role="status"><span class="visually-hidden">Loading...</span></div></td>
+   
+   
+   {% endif %}
+  </tr>
+  {% empty %}
+  </table>
+   <h3 class="text-center">Тут будет список загруженных вами документов.</h3><table>
+  {% endfor %}
+  
+ </table>
+
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/upload.js' %}"></script>
+<script src="{% static 'js/refresh.js' %}"></script>
+{% endblock %}

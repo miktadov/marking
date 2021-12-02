@@ -1,0 +1,36 @@
+body {
+	min-height: 100vh;
+	position: relative;
+	overflow_x: hidden;
+}
+.a0 {
+	height: 100px;
+}
+.a1 {
+	position: absolute;
+	width: 100%;
+	bottom: 0;
+}
+.a2 {
+	height: 100px;
+}
+
+.alert {
+	position: absolute;
+	left: 10px;
+	right: 10px;
+	top: 10px;
+}
+
+.al2 {
+	background-color: white;
+	position: absolute;
+	left: 25px;
+	right: 25px;
+	top: 25px;
+	bottom: 25px;
+}
+.deactive {display: none;}
+.w100 {
+	width:100%;
+}

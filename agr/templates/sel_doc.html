@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Документы{% endblock %}
+
+{% block active2 %}active{% endblock %}
+
+{% block content %}
+
+<div class="container-lg">
+<br>
+<a class="btn btn-sm btn-primary" href="{% url 'documents' %}">Назад</a>
+<br><br>
+
+ <table class="table">
+  <tr><td>Название документа:</td><td>{{ pdf.file_name }}</td></tr>
+  <tr><td>Количество кодов в документе:</td><td>{{ pdf.count_pages }} км</td></tr>
+ </table>
+
+<br><br><br>
+ <form class="form-group" action="{% url 'sel_doc' %}" enctype="multipart/form-data" method ="POST">
+  {% csrf_token %}
+  
+  <div class="row">
+   <div class="col-sm-6">
+    <label>С какого кода:</label>
+    <input class="form-control" type="number" name="first" placeholder="Включительно" min="1" max="" value="1">
+   </div>
+   <div class="col-sm-6">
+    <label>По какой код:</label>
+    <input class="form-control" type="number" name="last" placeholder="Включительно" min="1" max="{{ pdf.count_pages }}" value="{{ pdf.count_pages }}">
+    
+   </div>
+  </div>
+  <br>
+  
+  <input class="deactive" type="text" name="file" value="{{ pdf.pk }}">
+  
+  <div class="row">
+  <div class="col-sm-6">
+  <table>
+   <tr><td><input type="radio" name="type" value="csv" checked=""> </td><td> Чистый CSV.</td></tr>
+   <tr><td><input type="radio" name="type" value="agr"> </td><td> Агрегация.</td></tr>
+   <tr><td><input type="radio" name="type" value="contr"> </td><td> Контрактное производство РФ.</td></tr>
+   <tr><td><input type="radio" name="type" value="spis" disabled> </td><td> Списание. <sub>*в разработке</sub></td></tr></table></div>
+  
+  <div class="col-sm-6">
+  <table>
+   <tr><td><input type="radio" name="type" value="otgr" disabled> </td><td> Отгрузка. <sub>*в разработке</sub></td></tr>
+   <tr><td><input type="radio" name="type" value="otgr_vivod" disabled> </td><td> Отгрузка с выводом из оборота. <sub>*в разработке</sub></td></tr>
+   <tr><td><input type="radio" name="type" value="vivod" disabled> </td><td> Вывод из оборота. <sub>*в разработке</sub></td></tr>
+   <tr><td><input type="radio" name="type" value="co" disabled> </td><td> .... <sub>*в разработке</sub></td></tr></table></div></div><br>
+  
+  <div class="someClass deactive" id="agr">
+   <div class="row">
+    <div class="col-sm-6">
+     <label>Префикс:</label>
+     <input class="form-control" type="number" name="prefix" value="{{ personal.prefix }}"><br>
+    </div>
+    <div class="col-sm-6">
+     <label>Сколько КМ в одной коробке:</label>
+     <input class="form-control" type="number" name="inbox" placeholder="Включительно" min="1" max="{{ pdf.count_pages }}" value="1"><br>
+    </div>
+    <div class="col-sm-6">
+     <label>Сколько коробок:</label>
+     <input class="form-control" type="number" name="boxs" placeholder="Включительно" min="1" max="{{ pdf.count_pages }}" value="1"><br>
+    </div>
+    <div class="col-sm-6">
+     <label>Порядковый номер первой коробки:</label>
+    <input class="form-control" type="number" name="firstagr" min="0" value="1"><br>
+    </div>
+   </div><br></div>
+  
+  <div class="someClass deactive" id="contr">
+   <div class="row">
+    <div class="col-sm-6">
+     <label>Код ТН ВЭД ЕАЭС товара:</label>
+     <input class="form-control" type="text" name="tnvd"><br>
+    </div>
+    <div class="col-sm-6">
+     <label>Дата производства:</label>
+     <input class="form-control" type="date" name="date_make"><br>
+    </div>
+    <div class="col-sm-6">
+     <label>Вид документа подтверждающего соответствие:</label>
+    <input class="form-control" type="text" name="doc_type" value="Сертификат соответствия"><br>
+    </div>
+    <div class="col-sm-6">
+     <label>Номер документа подтверждающего соответствие:</label>
+     <input class="form-control" type="text" name="doc_numb"><br>
+    </div>
+    <div class="col-sm-6">
+     <label>Дата документа подтверждающего соответствие:</label>
+     <input class="form-control" type="date" name="doc_date"><br>
+    </div>
+    <div class="col-sm-6">
+     <label>Идентификатор ВСД:</label>
+    <input class="form-control" type="text" name="vsd"><br>
+    </div>
+   </div><br></div>
+
+  <input class="btn btn-primary" type="submit" value="Сформировать файл"> 
+ </form>
+ <br><hr><br>
+ <table class="table table-hover table-striped">
+  <thead class="thead-dark">
+   <td>Дата создания</td>
+   <td>Тип операции</td>
+   <td>КМ</td>
+   <td>Коммент</td>
+   <td>С</td>
+   <td>По</td>
+   <td>Скачать</td>
+  </thead>
+
+  {% for fil in files reversed %}
+  <tr>
+   <td>{{ fil.data }}</td>
+   <td>{{ fil.type }}</td>
+   <td>{{ fil.count }}</td>
+   <td>{{ fil.comment|truncatechars:10 }}</td>
+   <td>{{ fil.first }}</td>
+   <td>{{ fil.last }}</td>
+   <td><a href="{{ fil.file.url }}" download="">Скачать</a></td>
+  </tr>
+  {% endfor %}
+ </table>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/ji.js' %}"></script>
+{% endblock %}
+

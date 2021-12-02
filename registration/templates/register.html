@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Регистация{% endblock %}
+
+{% block content %}
+
+<div class="container">
+<br><br><br><br><br>
+
+<div class="row">
+  <div class="col-sm-3 col-md-4"></div>
+  <div class="col-sm-6 col-md-4"><h1 class="text-center">РЕГИСТРАЦИЯ</h1>
+  </div>
+ </div>
+
+<form method="POST">
+{% csrf_token %}
+
+{% for obj in form %}
+ <div class="row">
+  <div class="col-sm-3 col-md-4"></div>
+  <div class="col-sm-6 col-md-4">
+   <label>{{ obj.label_tag }}</label>
+   <div class="form-group form-group-justified">
+  {{ obj }}
+    <div class="invalid-feedback">
+    {{ obj.errors }}
+    </div>
+   </div>
+  </div>
+ </div>
+{% endfor %}
+<br>
+ <div class="row">
+  <div class="col-sm-3 col-md-4"></div>
+  <div class="col-sm-6 col-md-4">
+   <div class="btn-group btn-group-justified">
+    <div class="btn-group">
+     <button class="btn btn-primary" type="submit">Регистрация</button>
+    </div>
+   </div>
+  </div>
+ </div>
+ 
+</form>
+
+</div>
+
+{% endblock %}

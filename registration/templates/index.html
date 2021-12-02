@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Главная{% endblock %}
+
+{% block active1 %}active{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid bg-secondary" style="background: url('{% static 'general2.png' %}') no-repeat; background-size: cover; background-position: center center; height:550px;">
+</div>
+
+<div class="container-md" style="max-width: 600px;">
+ <br><br><br>
+ <h1 class="text-center text-secondary"><strong>1 код = 12 коп.</strong></h1>
+ <p class="text-center">Средний процент прироста к себистоимости товара после конвертации составляет 0.001% <sup>*опрос наших пользователей.</sup></p>
+ <br><br>
+ 
+ <div class="card mb-10 box-shadow">
+ <div class="card-body">
+ <h2 class="text-center">ОСТАВИТЬ ЗАЯВКУ</h2>
+ <form class="form-group" action="{% url 'feed' %}" enctype="multipart/form-data" method ="POST">
+  {% csrf_token %}
+  
+  <label>Ваше Имя:</label>
+  <input class="form-control" type="text" name="coll_name" placeholder="Имя"><br>
+  
+  <label>Телефон и желаемый способ связи:</label>
+  <input class="form-control" type="text" name="coll_tel" placeholder="+7 (999) 111-22-33 (Wa, Tg, Позвонить)"><br>
+  
+  <input class="btn btn-success" style="width:100%;" type="submit" value="Оставить заявку">
+ </form>
+ </div>
+ </div>
+ 
+ <br><br>
+
+ <h2 class="text-center">Посмотрите <strong class="text-info">ВИДЕО-ИНСТРУКЦИЮ</strong> до конца.</h2>
+ <h4 class="text-center text-secondary">Это просто.</h4>
+ <br>
+ <div class="text-center">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/_nLhzU6hrEU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+<br><br><br><hr><br>
+
+ <div class="container-md">
+  <h2 class="text-center">Как появилось это веб приложение?</h2>
+  <br>
+  <p>Привет. Меня зовут Алексей, я разработчик веб приложений и программ. Работая на обувном предприятии, я столкнулся с проблемой агрегации кодов маркировки. В дальнейшем ЦРПТ перестали предоставлять коды маркировок в CSV файле. Это создало новые проблемы, такие как : печать кодов, формирование документов для ввода в оборот, отгрузки, учет кодов и т.п..</p>
+  <p>Данный сайт является спасением для производств, которым маркировка доставляет множество проблем и финансовых трудностей.</p>
+  <p>Если в силу уникальности Вашего процесса производства, Вам не подходят методы обработки и преобразования, Вы можете оставить отзыв ниже, описав проблему и обозначив какой код и в каком виде Вам необходим. Я отвечу Вам в самое ближайшее время и дам знать, смогу ли я дополнить сайт данной программой или нет.</p>
+  <p>Мне пришлось сделать сайт платным, так как его обслуживание занимает много времени, а процесс преобразования PDV в CSV потребляет много мощности, что вынуждает меня арендовать сервер с повышенными мощностями. Я надеюсь, что со временем пользователей станет больше, а цены на конвертацию станут ниже.</p>
+  <br><br>
+  
+  <div class="card mb-10 box-shadow">
+   <div class="card-body">
+    <h4 class="text-center">Оставьте комментарий</h4>
+    
+    <form class="form-group" action="{% url 'comment' %}" enctype="multipart/form-data" method ="POST">
+  {% csrf_token %}
+  
+     <input class="form-control" type="text" name="name" placeholder="Имя"><br>
+     <input class="form-control" type="tel" name="tel" placeholder="Телефон. Если нужен срочный ответ на whatsapp"><br>
+     <textarea class="form-control" rows="2" name="text" placeholder="Напишите ваш комментарий тут"></textarea><br>
+     <input class="btn btn-dark btn-block" style="width:100%;" type="submit" value="Отправить комментарий">
+    </form><hr>
+    
+    
+    <div style="max-height:400px; overflow:scroll;">
+    
+    {% for com in comments reversed %}
+    <div class="media text-muted pt-3">
+     <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray"><strong class="d-block text-gray-dark">
+       {{ com.author }}</strong>
+       {{ com.text }}</p>
+       <sub>{{ com.data }}</sub></div><hr>
+     {% empty %}
+     <h3>На данный момент комментариев нет.</h3>
+     {% endfor %}
+    
+    </div>
+    <!--<small class="d-block text-right mt-3">
+     <a href="#">Все комментарии</a>
+    </small>-->
+   </div>
+  </div>
+  <br><br>
+ </div>
+</div>
+
+{% endblock %}
